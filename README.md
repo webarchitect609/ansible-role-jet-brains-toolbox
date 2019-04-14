@@ -1,12 +1,18 @@
 Ansible Role: JetBrains Toolbox
 =========
 
-Installs JetBrains [Toolbox](https://www.jetbrains.com/toolbox/app/)
+[![Build Status](https://travis-ci.org/webarchitect609/ansible-role-jet-brains-toolbox.svg?branch=master)](https://travis-ci.org/webarchitect609/ansible-role-jet-brains-toolbox)
+
+Installs JetBrains [Toolbox](https://www.jetbrains.com/toolbox/app/) App. 
+
+It downloads and unpacks the tar archive from JetBrains. After the installation is complete,
+`jetbrains-toolbox` executable script should be ran manually. It installs the app in `~/.local/share/JetBrains/Toolbox/`
+and runs it.    
 
 Requirements
 ------------
 
-Check JetBrains Toolbox [System requirements](https://www.jetbrains.com/toolbox/app/#systemRequirements)
+Please, check [Toolbox System requirements](https://toolbox-support.jetbrains.com/hc/en-us/articles/115000978824-What-are-the-system-requirements-for-Toolbox-App-). 
 
 
 Role Variables
@@ -16,7 +22,10 @@ Available variables are listed below, along with default values (see `defaults/m
 
     toolbox_version: "1.14.5037"
 
-Which [version/build](https://toolbox-support.jetbrains.com/hc/en-us/articles/360000048240-Previous-Toolbox-App-releases) to install.
+Which version to install. Please, [check current Toolbox App version](https://www.jetbrains.com/toolbox/download/download-thanks.html) 
+or [previous releases](https://toolbox-support.jetbrains.com/hc/en-us/articles/360000048240-Previous-Toolbox-App-releases).
+But since it has included auto-update feature, it doesn't really matters which version to use. 
+
 
     toolbox_install_dir: "/opt"
 
@@ -37,7 +46,7 @@ Including an example of how to use your role (for instance, with variables passe
       vars_files:
         - vars/main.yml
       roles:
-         - { role: webarchitect609.jet-brains-toolbox }
+         - { role: webarchitect609.jet_brains_toolbox }
 
 *Inside `vars/main.yml`*:
 
