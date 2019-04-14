@@ -1,0 +1,27 @@
+---
+- name: "Check if {{ application_name }} is installed"
+  find:
+    name: "{{ toolbox_install_dir }}"
+    filetype: "file"
+    pattern: '.*/jetbrains-toolbox-[^/]*/jetbrains-toolbox$'
+    use_regex: yes
+    recurse: yes
+  register: is_installed
+
+- name: "Download {{ application_name }} of version {{ toolbox_version }}"
+  get_url:
+    url: "{{ download_url }}"
+    dest: "{{ temporary_file_name }}"
+  when: is_installed.matched == 0
+
+- name: "Installing it to the {{ toolbox_install_dir }}"
+  unarchive:
+    src: "{{ temporary_file_name }}"
+    dest: "{{ toolbox_install_dir }}"
+  when: is_installed.matched == 0
+
+- name: "Remove temporary file"
+  file:
+    name: "{{ temporary_file_name }}"
+    state: "absent"
+  when: is_installed.matched == 0

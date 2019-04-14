@@ -1,0 +1,5 @@
+---
+application_name: "JetBrains Toolbox"
+archive_file_name: "jetbrains-toolbox-{{ toolbox_version }}.tar.gz"
+download_url: "https://download.jetbrains.com/toolbox/{{ archive_file_name }}"
+temporary_file_name: "/tmp/{{ archive_file_name }}"
