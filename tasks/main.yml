@@ -1,27 +1,37 @@
 ---
-- name: "Check if {{ application_name }} is installed"
+- name: "Check if {{ application_name }} is installed."
   find:
     name: "{{ toolbox_install_dir }}"
-    filetype: "file"
-    pattern: '.*/jetbrains-toolbox-[^/]*/jetbrains-toolbox$'
-    use_regex: yes
-    recurse: yes
+    file_type: "file"
+    pattern: 'jetbrains-toolbox'
+    use_regex: false
+    recurse: true
+    depth: 2
   register: is_installed
 
-- name: "Download {{ application_name }} of version {{ toolbox_version }}"
-  get_url:
-    url: "{{ download_url }}"
-    dest: "{{ temporary_file_name }}"
-  when: is_installed.matched == 0
+- name: "Check for multiple installations"
+  fail:
+    msg:
+      "Warning: {{ is_installed.matched }} installations found in {{ toolbox_install_dir }}! Please, fix it manually."
+  when: is_installed.matched > 1
+  ignore_errors: true
 
-- name: "Installing it to the {{ toolbox_install_dir }}"
-  unarchive:
-    src: "{{ temporary_file_name }}"
-    dest: "{{ toolbox_install_dir }}"
-  when: is_installed.matched == 0
+- name: "Installation process."
+  block:
+    - name: "Download {{ application_name }} of version {{ toolbox_version }}"
+      get_url:
+        url: "{{ download_url }}"
+        dest: "{{ temporary_file_name }}"
 
-- name: "Remove temporary file"
-  file:
-    name: "{{ temporary_file_name }}"
-    state: "absent"
+    - name: "Installing it to the {{ toolbox_install_dir }}"
+      unarchive:
+        remote_src: true
+        src: "{{ temporary_file_name }}"
+        dest: "{{ toolbox_install_dir }}"
+
+    - name: "Remove temporary file"
+      file:
+        name: "{{ temporary_file_name }}"
+        state: "absent"
+
   when: is_installed.matched == 0
