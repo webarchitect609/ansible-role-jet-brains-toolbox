@@ -35,3 +35,9 @@
         state: "absent"
 
   when: is_installed.matched == 0
+
+- name: Set Inotify Watches Limit
+  sysctl: name="fs.inotify.max_user_watches"
+          value="{{ inotify_max_user_watches }}"
+          state="present"
+          reload="yes"

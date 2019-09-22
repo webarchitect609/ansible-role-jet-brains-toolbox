@@ -30,7 +30,11 @@ But since it has included auto-update feature, it doesn't really matters which v
     toolbox_install_dir: "/opt"
 
 Directory to install to.
- 
+
+    inotify_max_user_watches: "524288"
+    
+Value for [Inotify Watches Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
+to be set via `sysctl`. 
 
 Dependencies
 ------------
@@ -40,8 +44,6 @@ None.
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
     - hosts: servers
       vars_files:
         - vars/main.yml
@@ -50,7 +52,7 @@ Including an example of how to use your role (for instance, with variables passe
 
 *Inside `vars/main.yml`*:
 
-    toolbox_version: "1.14.5037"
+    toolbox_version: "1.15.5796"
     toolbox_install_dir: "/opt"
 
 License
