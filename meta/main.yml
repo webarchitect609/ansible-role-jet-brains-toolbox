@@ -5,18 +5,9 @@ galaxy_info:
   author: Gripinskiy Sergey
   description: Installs JetBrains Toolbox https://www.jetbrains.com/toolbox/app/
   company:
-  license: MIT
+  license: BSD-3-Clause
   min_ansible_version: 2.4
   platforms:
-    - name: EL
-      versions:
-        - all
-    - name: Fedora
-      versions:
-        - all
-    - name: Debian
-      versions:
-        - all
     - name: Ubuntu
       versions:
         - all

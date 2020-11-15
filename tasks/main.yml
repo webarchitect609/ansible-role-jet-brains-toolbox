@@ -1,5 +1,5 @@
 ---
-- name: "Check if {{ application_name }} is installed."
+- name: "Check if {{ application_name }} is installed"
   find:
     name: "{{ toolbox_install_dir }}"
     file_type: "file"
@@ -16,14 +16,14 @@
   when: is_installed.matched > 1
   ignore_errors: true
 
-- name: "Installation process."
+- name: "Installation process"
   block:
     - name: "Download {{ application_name }} of version {{ toolbox_version }}"
       get_url:
         url: "{{ download_url }}"
         dest: "{{ temporary_file_name }}"
 
-    - name: "Installing it to the {{ toolbox_install_dir }}"
+    - name: "Install to {{ toolbox_install_dir }}"
       unarchive:
         remote_src: true
         src: "{{ temporary_file_name }}"

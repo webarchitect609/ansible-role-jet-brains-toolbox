@@ -48,10 +48,6 @@ jobs:
             playbook: converge.yml
           - distro: ubuntu1604
             playbook: converge.yml
-          - distro: debian10
-            playbook: converge.yml
-          - distro: debian9
-            playbook: converge.yml
 
     steps:
       - name: Check out the codebase
