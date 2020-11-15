@@ -60,7 +60,7 @@ jobs:
           path: 'webarchitect609.jet_brains_toolbox'
 
       - name: Set up Python 3
-        uses: actions?setup-python@v2
+        uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
