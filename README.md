@@ -1,6 +1,6 @@
 Ansible Role: JetBrains Toolbox
 ===============================
-[![Build Status](https://github.com/webarchitect609/ansible-role-jet-brains-toolbox/workflows/build/badge.svg?branch=master)](https://github.com/geerlingguy/ansible-role-php/actions?query=workflow%3Abuild)
+[![Build Status](https://github.com/webarchitect609/ansible-role-jet-brains-toolbox/workflows/build/badge.svg?branch=master)](https://github.com/webarchitect609/ansible-role-jet-brains-toolbox/actions?query=workflow%3Abuild)
 [![Latest version](https://img.shields.io/github/v/tag/webarchitect609/ansible-role-jet-brains-toolbox?sort=semver)](https://github.com/webarchitect609/ansible-role-jet-brains-toolbox/releases)
 [![Downloads](https://img.shields.io/ansible/role/d/39614)](https://galaxy.ansible.com/webarchitect609/jet_brains_toolbox)
 [![License](https://img.shields.io/github/license/webarchitect609/ansible-role-jet-brains-toolbox)](LICENSE.md)
