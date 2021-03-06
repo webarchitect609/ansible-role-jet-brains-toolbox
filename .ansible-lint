@@ -1,5 +1,13 @@
 skip_list:
-  - '306'
-  - '405'
-  - '503'
-  - '106'
+  - 'yaml'
+  - 'risky-shell-pipe'
+  - 'no-handler'
+  - 'role-name'
+
+exclude_paths:
+  - .github/
+  # Lint confuses it with a Play and says "'src' is not a valid attribute for a Play"
+  - molecule/default/requirements.yml
+
+mock_roles:
+  - webarchitect609.jet_brains_toolbox
