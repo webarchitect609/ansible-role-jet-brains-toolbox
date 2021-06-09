@@ -23,7 +23,7 @@ Role Variables
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
-    toolbox_version: "1.20.7940"
+    toolbox_version: "1.20.8804"
 
 Which version to install. Please, [check current Toolbox App version](https://www.jetbrains.com/toolbox/download/download-thanks.html) 
 or [previous releases](https://toolbox-support.jetbrains.com/hc/en-us/articles/360000048240-Previous-Toolbox-App-releases).
