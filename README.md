@@ -55,7 +55,7 @@ Example Playbook
 
 *Inside `vars/main.yml`*:
 
-    toolbox_version: "1.20.7940"
+    toolbox_version: "1.20.8804"
     toolbox_install_dir: "/opt"
 
 License & Author Information
