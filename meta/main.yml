@@ -10,7 +10,10 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - all
+        # 18.04 LTS
+        - bionic
+        # 20.04 LTS
+        - focal
   galaxy_tags:
     - jetbrains
     - jet

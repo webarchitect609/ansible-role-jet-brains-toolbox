@@ -46,8 +46,6 @@ jobs:
             playbook: converge.yml
           - distro: ubuntu1804
             playbook: converge.yml
-          - distro: ubuntu1604
-            playbook: converge.yml
 
     steps:
       - name: Check out the codebase
