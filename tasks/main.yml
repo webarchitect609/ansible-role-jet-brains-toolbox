@@ -33,7 +33,7 @@
       copy:
         src: "{{ toolbox_install_dir }}/{{ toolbox_install_file }}-{{ toolbox_version }}/{{ toolbox_install_file }}"
         dest: "{{ toolbox_install_path }}"
-        remote_src: yes
+        remote_src: true
         owner: "root"
         group: "root"
         mode: '0777'
@@ -47,15 +47,17 @@
         - "{{ temporary_file_name }}"
 
     - name: "Run as user to finish installation"
-      shell: "{{ toolbox_install_path }}"
-      become: yes
+      command: "{{ toolbox_install_path }}"
+      become: true
       become_user: "{{ toolbox_install_for_user }}"
-      when: toolbox_install_for_user != ""
+      when: toolbox_install_for_user
 
     - name: Reminder how to launch
       debug:
-        msg: "User, who will use {{ application_name }}, have to run {{ toolbox_install_path }} manually for the first time."
-      when: toolbox_install_for_user == ""
+        msg: |
+          User, who will use {{ application_name }}, have to run {{ toolbox_install_path }}
+          manually for the first time.
+      when: not toolbox_install_for_user
 
   when: is_installed.matched == 0
 
