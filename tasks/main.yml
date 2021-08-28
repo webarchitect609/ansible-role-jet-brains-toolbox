@@ -3,7 +3,7 @@
   find:
     name: "{{ toolbox_install_dir }}"
     file_type: "file"
-    pattern: 'jetbrains-toolbox'
+    pattern: "{{ toolbox_install_file }}"
     use_regex: false
     recurse: true
     depth: 2
@@ -29,15 +29,38 @@
         src: "{{ temporary_file_name }}"
         dest: "{{ toolbox_install_dir }}"
 
-    - name: "Remove temporary file"
+    - name: "Move executable from the folder"
+      copy:
+        src: "{{ toolbox_install_dir }}/{{ toolbox_install_file }}-{{ toolbox_version }}/{{ toolbox_install_file }}"
+        dest: "{{ toolbox_install_path }}"
+        remote_src: yes
+        owner: "root"
+        group: "root"
+        mode: '0777'
+
+    - name: "Remove temporary folders and files"
       file:
-        name: "{{ temporary_file_name }}"
+        name: "{{ item }}"
         state: "absent"
+      with_items:
+        - "{{ toolbox_install_dir }}/{{ toolbox_install_file }}-{{ toolbox_version }}"
+        - "{{ temporary_file_name }}"
+
+    - name: "Run as user to finish installation"
+      shell: "{{ toolbox_install_path }}"
+      become: yes
+      become_user: "{{ toolbox_install_for_user }}"
+      when: toolbox_install_for_user != ""
+
+    - name: Reminder how to launch
+      debug:
+        msg: "User, who will use {{ application_name }}, have to run {{ toolbox_install_path }} manually for the first time."
+      when: toolbox_install_for_user == ""
 
   when: is_installed.matched == 0
 
 - name: Set Inotify Watches Limit
   sysctl: name="fs.inotify.max_user_watches"
-          value="{{ inotify_max_user_watches }}"
-          state="present"
-          reload="yes"
+    value="{{ inotify_max_user_watches }}"
+    state="present"
+    reload="yes"

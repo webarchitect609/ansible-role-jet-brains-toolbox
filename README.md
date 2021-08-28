@@ -10,7 +10,7 @@ Installs JetBrains [Toolbox App](https://www.jetbrains.com/toolbox/app/).
 
 It downloads and unpacks the tar archive from JetBrains. After the installation is complete,
 `jetbrains-toolbox` executable script should be ran manually. It installs the app in `~/.local/share/JetBrains/Toolbox/`
-and runs it.    
+and runs it.
 
 Requirements
 ------------
@@ -34,6 +34,10 @@ But since it has included auto-update feature, it doesn't really matters which v
 
 Directory to install to.
 
+    toolbox_install_for_user: ""
+
+User, who will use the application.
+
     inotify_max_user_watches: "524288"
     
 Value for [Inotify Watches Limit](https://youtrack.jetbrains.com/articles/IDEA-A-2/Inotify-Watches-Limit?_ga=2.156569083.1588360972.1630133506-996241065.1624703636)
@@ -48,15 +52,12 @@ Example Playbook
 ----------------
 
     - hosts: servers
-      vars_files:
-        - vars/main.yml
       roles:
-         - { role: webarchitect609.jet_brains_toolbox }
-
-*Inside `vars/main.yml`*:
-
-    toolbox_version: "1.21.9712"
-    toolbox_install_dir: "/opt"
+        - { role: webarchitect609.jet_brains_toolbox }
+      vars:
+        toolbox_version: "1.21.9712"
+        toolbox_install_dir: "/opt"
+        toolbox_install_for_user: "yourusername"
 
 License & Author Information
 -------

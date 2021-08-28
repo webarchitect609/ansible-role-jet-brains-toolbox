@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.2.0
+-----
+
+### Added
+
+- Variable `toolbox_install_for_user`, which can contain login of the user, who will be using the application. 
+
 1.1.0
 -----
 
