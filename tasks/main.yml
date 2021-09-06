@@ -13,8 +13,7 @@
   fail:
     msg:
       "Warning: {{ is_installed.matched }} installations found in {{ toolbox_install_dir }}! Please, fix it manually."
-  when: is_installed.matched > 1
-  ignore_errors: true
+  failed_when: is_installed.matched > 1
 
 - name: "Installation process"
   block:
@@ -50,14 +49,14 @@
       command: "{{ toolbox_install_path }}"
       become: true
       become_user: "{{ toolbox_install_for_user }}"
-      when: toolbox_install_for_user
+      when: toolbox_install_for_user | length
 
     - name: Reminder how to launch
       debug:
         msg: |
           User, who will use {{ application_name }}, have to run {{ toolbox_install_path }}
           manually for the first time.
-      when: not toolbox_install_for_user
+      when: not( toolbox_install_for_user | length )
 
   when: is_installed.matched == 0
 
