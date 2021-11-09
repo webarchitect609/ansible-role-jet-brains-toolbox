@@ -23,7 +23,7 @@ Role Variables
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
-    toolbox_version: "1.21.9712"
+    toolbox_version: "1.22.10685"
 
 Which version to install. Please, [check current Toolbox App version](https://www.jetbrains.com/toolbox/download/download-thanks.html) 
 or [previous releases](https://toolbox-support.jetbrains.com/hc/en-us/articles/360000048240-Previous-Toolbox-App-releases).
@@ -55,7 +55,7 @@ Example Playbook
       roles:
         - { role: webarchitect609.jet_brains_toolbox }
       vars:
-        toolbox_version: "1.21.9712"
+        toolbox_version: "1.22.10685"
         toolbox_install_dir: "/opt"
         toolbox_install_for_user: "yourusername"
 
