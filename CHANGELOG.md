@@ -1,12 +1,19 @@
 Changelog
 =========
 
+1.2.3
+-----
+
+### Changed
+
+- Default version is updated to `1.22.10685`
+
 1.2.0
 -----
 
 ### Added
 
-- Variable `toolbox_install_for_user`, which can contain login of the user, who will be using the application. 
+- Variable `toolbox_install_for_user`, which can contain login of the user, who will be using the application.
 
 1.1.0
 -----
