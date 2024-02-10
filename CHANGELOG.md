@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0.0
+-----
+
+### Changed
+
+- Default version is updated to `2.2.1.19765`
+
 1.2.3
 -----
 

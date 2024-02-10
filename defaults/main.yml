@@ -1,5 +1,5 @@
 ---
-toolbox_version: "1.22.10685"
+toolbox_version: "2.2.1.19765"
 toolbox_install_dir: "/opt"
 toolbox_install_for_user: ""
 inotify_max_user_watches: "524288"

@@ -1,6 +1,6 @@
 ---
-- name: "Check if {{ application_name }} is installed"
-  find:
+- name: "Check if Toolbox is installed"
+  ansible.builtin.find:
     name: "{{ toolbox_install_dir }}"
     file_type: "file"
     pattern: "{{ toolbox_install_file }}"
@@ -10,26 +10,28 @@
   register: is_installed
 
 - name: "Check for multiple installations"
-  fail:
+  ansible.builtin.fail:
     msg:
       "Warning: {{ is_installed.matched }} installations found in {{ toolbox_install_dir }}! Please, fix it manually."
   failed_when: is_installed.matched > 1
 
 - name: "Installation process"
+  when: is_installed.matched == 0
   block:
-    - name: "Download {{ application_name }} of version {{ toolbox_version }}"
-      get_url:
+    - name: "Download Toolbox, version {{ toolbox_version }}"
+      ansible.builtin.get_url:
         url: "{{ download_url }}"
         dest: "{{ temporary_file_name }}"
+        mode: 0644
 
     - name: "Install to {{ toolbox_install_dir }}"
-      unarchive:
+      ansible.builtin.unarchive:
         remote_src: true
         src: "{{ temporary_file_name }}"
         dest: "{{ toolbox_install_dir }}"
 
     - name: "Move executable from the folder"
-      copy:
+      ansible.builtin.copy:
         src: "{{ toolbox_install_dir }}/{{ toolbox_install_file }}-{{ toolbox_version }}/{{ toolbox_install_file }}"
         dest: "{{ toolbox_install_path }}"
         remote_src: true
@@ -38,7 +40,7 @@
         mode: '0777'
 
     - name: "Remove temporary folders and files"
-      file:
+      ansible.builtin.file:
         name: "{{ item }}"
         state: "absent"
       with_items:
@@ -46,22 +48,22 @@
         - "{{ temporary_file_name }}"
 
     - name: "Run as user to finish installation"
-      command: "{{ toolbox_install_path }}"
+      ansible.builtin.command: "{{ toolbox_install_path }}"
+      changed_when: false
       become: true
       become_user: "{{ toolbox_install_for_user }}"
       when: toolbox_install_for_user | length
 
     - name: Reminder how to launch
-      debug:
+      ansible.builtin.debug:
         msg: |
           User, who will use {{ application_name }}, have to run {{ toolbox_install_path }}
           manually for the first time.
       when: not( toolbox_install_for_user | length )
 
-  when: is_installed.matched == 0
-
 - name: Set Inotify Watches Limit
-  sysctl: name="fs.inotify.max_user_watches"
-    value="{{ inotify_max_user_watches }}"
-    state="present"
-    reload="yes"
+  ansible.posix.sysctl:
+    name: "fs.inotify.max_user_watches"
+    value: "{{ inotify_max_user_watches }}"
+    state: "present"
+    reload: "yes"
