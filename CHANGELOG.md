@@ -1,6 +1,14 @@
 Changelog
 =========
 
+3.0.0
+-----
+
+### Changed
+
+- Default version is updated to `3.2.0.65851`
+- New installation sequence
+
 2.0.0
 -----
 

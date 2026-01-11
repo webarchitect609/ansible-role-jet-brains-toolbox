@@ -1,69 +1,87 @@
 ---
-- name: "Check if Toolbox is installed"
-  ansible.builtin.find:
-    name: "{{ toolbox_install_dir }}"
-    file_type: "file"
-    pattern: "{{ toolbox_install_file }}"
-    use_regex: false
-    recurse: true
-    depth: 2
-  register: is_installed
 
-- name: "Check for multiple installations"
-  ansible.builtin.fail:
-    msg:
-      "Warning: {{ is_installed.matched }} installations found in {{ toolbox_install_dir }}! Please, fix it manually."
-  failed_when: is_installed.matched > 1
-
-- name: "Installation process"
-  when: is_installed.matched == 0
+- name: "Install for user {{ toolbox_install_for_user }}"
+  become: true
+  become_user: "{{ toolbox_install_for_user }}"
+  when: toolbox_install_for_user | length
   block:
-    - name: "Download Toolbox, version {{ toolbox_version }}"
-      ansible.builtin.get_url:
-        url: "{{ download_url }}"
-        dest: "{{ temporary_file_name }}"
-        mode: 0644
 
-    - name: "Install to {{ toolbox_install_dir }}"
-      ansible.builtin.unarchive:
-        remote_src: true
-        src: "{{ temporary_file_name }}"
-        dest: "{{ toolbox_install_dir }}"
-
-    - name: "Move executable from the folder"
-      ansible.builtin.copy:
-        src: "{{ toolbox_install_dir }}/{{ toolbox_install_file }}-{{ toolbox_version }}/{{ toolbox_install_file }}"
-        dest: "{{ toolbox_install_path }}"
-        remote_src: true
-        owner: "root"
-        group: "root"
-        mode: '0777'
-
-    - name: "Remove temporary folders and files"
+    - name: "Ensure installation dir exists"
       ansible.builtin.file:
-        name: "{{ item }}"
-        state: "absent"
-      with_items:
-        - "{{ toolbox_install_dir }}/{{ toolbox_install_file }}-{{ toolbox_version }}"
-        - "{{ temporary_file_name }}"
+        path: "{{ toolbox_install_dir }}"
+        state: "directory"
+        mode: 0700
 
-    - name: "Run as user to finish installation"
-      ansible.builtin.command: "{{ toolbox_install_path }}"
-      changed_when: false
-      become: true
-      become_user: "{{ toolbox_install_for_user }}"
-      when: toolbox_install_for_user | length
+    - name: "Check if Toolbox is installed"
+      ansible.builtin.find:
+        name: "{{ toolbox_install_dir }}"
+        file_type: "file"
+        pattern: "{{ toolbox_install_file }}"
+        use_regex: false
+        recurse: true
+        depth: 2
+      register: is_installed
 
-    - name: Reminder how to launch
-      ansible.builtin.debug:
-        msg: |
-          User, who will use {{ application_name }}, have to run {{ toolbox_install_path }}
-          manually for the first time.
-      when: not( toolbox_install_for_user | length )
+    - name: "Check for multiple installations"
+      ansible.builtin.fail:
+        msg:
+          "Warning: {{ is_installed.matched }} installations found in {{ toolbox_install_dir }}! Please, fix it manually."
+      failed_when: is_installed.matched > 1
+
+    - name: "Installation process"
+      when: is_installed.matched == 0
+      block:
+
+        - name: "Ensure dependencies"
+          ansible.builtin.apt:
+            name: "{{ toolbox_req_packages }}"
+            state: "present"
+
+        - name: "Download Toolbox, version {{ toolbox_version }}"
+          ansible.builtin.get_url:
+            url: "{{ download_url }}"
+            dest: "{{ temporary_file_name }}"
+            mode: 0644
+
+        - name: "Unpack"
+          ansible.builtin.unarchive:
+            remote_src: true
+            src: "{{ temporary_file_name }}"
+            dest: "/tmp"
+
+        - name: "Install files"
+          ansible.builtin.copy:
+            src: "{{ temporary_directory_name }}/"
+            dest: "{{ toolbox_install_dir }}"
+            remote_src: true
+            mode: '0775'
+
+        - name: "Remove temporary folders and files"
+          ansible.builtin.file:
+            name: "{{ item }}"
+            state: "absent"
+          with_items:
+            - "{{ temporary_directory_name }}"
+            - "{{ temporary_file_name }}"
+
+        - name: "Run as user to finish installation"
+          ansible.builtin.shell: "{{ toolbox_install_path }}"
+          async: 3600
+          poll: 0
+          register: toolbox_first_run
+          changed_when: false
+
+        - name: "Clear async job cache file"
+          ansible.builtin.async_status:
+            jid: "{{ toolbox_first_run.ansible_job_id }}"
+            mode: cleanup
 
 - name: Set Inotify Watches Limit
+  become: true
+  become_user: "root"
   ansible.posix.sysctl:
     name: "fs.inotify.max_user_watches"
     value: "{{ inotify_max_user_watches }}"
     state: "present"
     reload: "yes"
+  when: toolbox_install_for_user | length
