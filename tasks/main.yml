@@ -3,7 +3,7 @@
 - name: "Install for user {{ toolbox_install_for_user }}"
   become: true
   become_user: "{{ toolbox_install_for_user }}"
-  when: toolbox_install_for_user | length
+  when: toolbox_install_for_user | length > 0
   block:
 
     - name: "Ensure installation dir exists"
@@ -84,4 +84,4 @@
     value: "{{ inotify_max_user_watches }}"
     state: "present"
     reload: "yes"
-  when: toolbox_install_for_user | length
+  when: toolbox_install_for_user | length > 0
