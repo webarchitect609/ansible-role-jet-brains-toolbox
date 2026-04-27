@@ -33,11 +33,12 @@ Example Playbook
 ----------------
 
 ```yaml
-- hosts: servers
+  hosts: servers
   roles:
-     - { role: webarchitect609.jet-brains-toolbox }
-  vars:
-    toolbox_version: "3.2.0.65851"
+     - role: webarchitect609.jet_brains_toolbox
+       vars:
+         toolbox_version: "3.2.0.65851"
+
 ```
 
 License & Author Information
